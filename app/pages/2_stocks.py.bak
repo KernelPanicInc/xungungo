@@ -1,0 +1,31 @@
+import streamlit as st
+from pages.stocks_modules import chart
+
+with st.container():
+    col1, col2 = st.columns(2)
+    with col1:  
+        # Selector de ticker
+        tickers = ["AAPL", "GOOGL", "MSFT", "AMZN"]
+        selected_ticker = st.selectbox("Selecciona un ticker de stock:", tickers)
+    
+    with col2:
+        # Selector de tipo de gráfico o data
+        chart_types = ["Seleccioné","Gráfico de líneas", "Gráfico de velas", "Datos en tabla"]
+        selected_chart = st.selectbox("Selecciona el tipo de gráfico o data:", chart_types)
+
+# Espacio para mostrar contenido dinámico
+st.write("### Contenido dinámico")
+content_placeholder = st.container() # Espacio dinámico
+
+# Renderizar el contenido basado en la selección
+if selected_chart == "Gráfico de líneas":
+    with content_placeholder:
+        render_line_chart(selected_ticker)
+elif selected_chart == "Gráfico de velas":
+    with content_placeholder:
+        chart.render(selected_ticker)
+elif selected_chart == "Datos en tabla":
+    with content_placeholder:
+        render_table(selected_ticker)
+else:
+    content_placeholder.write("Por favor, selecciona un tipo de gráfico o datos.")
