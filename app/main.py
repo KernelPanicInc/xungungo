@@ -1,4 +1,5 @@
 import streamlit as st
+import utils.set_logo as set_logo
 
 st.set_page_config(
     page_title="Xungungo Stocks",
@@ -6,8 +7,7 @@ st.set_page_config(
     layout="wide",
 )
 
-#st.logo("static/xungungo.png", size="large")
-st.sidebar.image("static/xungungo.png")
+set_logo.set_logo()
 
 st.write("# Welcome to Xungungo! 👋")
 

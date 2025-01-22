@@ -80,4 +80,4 @@ def on_webview_close():
     stop_event.set()
 
 window.events.closed += on_webview_close
-webview.start(debug=False)
+webview.start(debug=True)

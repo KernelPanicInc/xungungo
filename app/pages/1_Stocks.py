@@ -2,10 +2,11 @@ import streamlit as st
 from streamlit_searchbox import st_searchbox
 from models.datasource.yahoo_datasource import search_service
 from utils.plugins import obtener_plugins
+import utils.set_logo as set_logo
 
+set_logo.set_logo()
 
 # pass search function and other options as needed
-print("SELECT")
 selected_value = st_searchbox(
     search_service,
     placeholder="Search Symbol... ",

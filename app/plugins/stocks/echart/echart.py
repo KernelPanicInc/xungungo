@@ -51,8 +51,8 @@ def render(ticker):
             series_name="Precio",
             y_axis=kline_data,
             itemstyle_opts=opts.ItemStyleOpts(
-                color="#ef232a", border_color="#ef232a", 
-                color0="#14b143", border_color0="#14b143"
+                color="#14b143", border_color="#14b143", 
+                color0="#ef232a", border_color0="#ef232a"
             ),
             yaxis_index=0,
         )
