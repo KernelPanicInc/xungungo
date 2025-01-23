@@ -39,11 +39,6 @@ jobs:
         run: |
           xcopy app dist\Xungungo\app /E /I
 
-      # Ensure requirements.txt exists
-      - name: Verify requirements.txt
-        run: |
-          if not exist app\requirements.txt (echo "" > app\requirements.txt)
-
       # Download and extract Python 3.9 embedded
       - name: Download Python 3.9 embedded
         run: |
