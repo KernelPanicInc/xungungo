@@ -63,14 +63,9 @@ jobs:
         run: |
           dist\Xungungo\python39\python.exe -m pip install -r dist\Xungungo\app\requirements.txt
 
-      # Create a zip package
-      - name: Create zip package
-        run: |
-          powershell -Command "Compress-Archive -Path dist\Xungungo\* -DestinationPath dist\Xungungo.zip"
-
       # Publish the zip package as an artifact
       - name: Upload zip package
         uses: actions/upload-artifact@v4
         with:
           name: XungungoPackage
-          path: dist\Xungungo.zip
+          path: dist\Xungungo\
