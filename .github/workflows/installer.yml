@@ -30,8 +30,8 @@ jobs:
           pip install pyinstaller
           pip install pipreqs
           pipreqs .
-          pip install -r requeriments.txt
-          del requeriments.txt
+          pip install -r requirements.txt
+          del requirements.txt
 
       # Build the executable
       - name: Build with PyInstaller
