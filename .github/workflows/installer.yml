@@ -50,13 +50,13 @@ jobs:
       - name: Enable pip for Python 3.9 embedded
         run: |
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          dist\Xungungo\python39\python.exe get-pip.py
+          dist\python39\python.exe get-pip.py
           del get-pip.py
 
       # Modify python39._pth to uncomment site import
       - name: Modify python39._pth
         run: |
-          powershell -Command "(Get-Content dist\Xungungo\python39\python39._pth) -replace '^#import site', 'import site' | Set-Content dist\Xungungo\python39\python39._pth"
+          powershell -Command "(Get-Content dist\Xungungo\python39\python39._pth) -replace '^#import site', 'import site' | Set-Content dist\python39\python39._pth"
 
       # Install requirements using embedded Python
       - name: Install app requirements
