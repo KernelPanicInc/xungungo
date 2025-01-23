@@ -37,7 +37,7 @@ jobs:
       # Copy the app folder to the dist directory
       - name: Copy app folder to dist
         run: |
-          xcopy app dist\Xungungo /E /I
+          xcopy app dist\Xungungo\app /E /I
 
       # Download and extract Python 3.9 embedded
       - name: Download Python 3.9 embedded
