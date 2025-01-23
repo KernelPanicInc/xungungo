@@ -1,7 +1,7 @@
 name = "SMA"
 plugin_type = "overlay"
 
-def get_user_params():
+def get_user_params(df = None):
     import streamlit as st
 
     with st.sidebar.expander("Parámetros SMA (3 líneas)", expanded=False):

@@ -1,7 +1,7 @@
 name = "TD Sequential"
 plugin_type = "overlay"
 
-def get_user_params():
+def get_user_params(data = None):
     import streamlit as st
 
     st.sidebar.subheader("Parámetros TD Sequential")

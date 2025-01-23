@@ -4,17 +4,24 @@ import threading
 import time
 import requests
 import os
+import sys
+import ctypes
 
 # Crear un evento para detener el hilo
 stop_event = threading.Event()
 
+ctypes.windll.user32.SetProcessDpiAwarenessContext(-4)
+
 def start_streamlit():
     """Inicia el servidor Streamlit en un hilo separado y muestra las salidas."""
     print("Iniciando Streamlit...")
-    ruta_main = "app/main.py"
-
+    ruta_main = "app/Dashboard.py"
+    streamlit_cmd = ["streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=auto"]
+    if hasattr(sys, '_MEIPASS'):
+        streamlit_cmd = ["python39\python.exe","-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=minimal"]
+        
     process = subprocess.Popen(
-        ["streamlit", "run", "main.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=auto"],
+        streamlit_cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -60,7 +67,7 @@ with open("app/static/loading.html", "r") as file:
     loading_html = file.read()
 
 # Crear el WebView con la pantalla de "loading"
-window = webview.create_window("Mi Aplicación Streamlit", html=loading_html)
+window = webview.create_window("Xungungo Stocks Analtycs", html=loading_html)
 
 def load_streamlit():
     """Cambia a la URL de Streamlit cuando esté listo."""
@@ -79,5 +86,6 @@ def on_webview_close():
     print("Cerrando la aplicación...")
     stop_event.set()
 
+
 window.events.closed += on_webview_close
-webview.start(debug=True)
+webview.start(debug=False, icon="app/static/xungungo.png")

@@ -1,5 +1,6 @@
 import streamlit as st
 import utils.set_logo as set_logo
+#import plugins.dashboard as dashboard
 
 st.set_page_config(
     page_title="Xungungo Stocks",
@@ -9,5 +10,6 @@ st.set_page_config(
 
 set_logo.set_logo()
 
-st.write("# Welcome to Xungungo! 👋")
+#dashboard.get_dashboard()
+st.switch_page("pages/1_Stocks.py")
 

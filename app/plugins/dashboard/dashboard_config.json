@@ -1,0 +1,16 @@
+{
+    "layout": {
+        "columns": 2
+    },
+    "widgets": [
+        {
+            "id": "Prueba",
+            "type": "CounterWidget",
+            "column": 0,
+            "params": {
+                "start_value": 0,
+                "increment": 1
+            }
+        }
+    ]
+}

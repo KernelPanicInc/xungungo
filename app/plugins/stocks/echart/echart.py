@@ -18,13 +18,14 @@ def render(ticker):
     # ====== Parámetros de fecha
     st.sidebar.subheader("Rango de Fechas")
     start_date = st.sidebar.date_input("Fecha inicio", dt.date.today() - dt.timedelta(days=365))
-    end_date = st.sidebar.date_input("Fecha fin", dt.datetime.combine(dt.date.today(), dt.time(11, 59)))
+    end_date = st.sidebar.date_input("Fecha fin", dt.date.today())
     if start_date > end_date:
         st.error("Fecha inicio > Fecha fin.")
         return
 
     # ====== Descarga de datos
     with st.spinner("Descargando datos..."):
+        end_date += dt.timedelta(days=1)  # Ajuste para incluir el último día
         df = yf.download(ticker, start=start_date, end=end_date)
         df = flatten_columns(df)
 
@@ -141,7 +142,7 @@ def render(ticker):
         if plug.name in selected_plugins:
             user_params = {}
             if hasattr(plug, "get_user_params"):
-                user_params = plug.get_user_params()
+                user_params = plug.get_user_params(df)
 
             plugin_type = getattr(plug, "plugin_type", "overlay")
             if plugin_type == "overlay" and hasattr(plug, "apply_overlay"):
