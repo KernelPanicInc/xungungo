@@ -61,6 +61,7 @@ jobs:
       # Install requirements using embedded Python
       - name: Install app requirements
         run: |
+          ls dist\Xungungo\app\
           dist\Xungungo\python39\python.exe -m pip install -r dist\Xungungo\app\requirements.txt
 
       # Create an installer with Inno Setup
