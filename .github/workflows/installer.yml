@@ -1,0 +1,76 @@
+name: Build Installer
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # Cambia a la versión que uses
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      # Build the executable
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile win.py
+
+      # Copy the app folder to the dist directory
+      - name: Copy app folder to dist
+        run: |
+          xcopy app dist\Xungungo /E /I
+
+      # Download and extract Python 3.9 embedded
+      - name: Download Python 3.9 embedded
+        run: |
+          curl -L -o python39-embedded.zip https://www.python.org/ftp/python/3.9.13/python-3.9.13-embed-amd64.zip
+          mkdir dist\Xungungo\python39
+          tar -xf python39-embedded.zip -C dist\Xungungo\python39
+
+      # Enable pip for embedded Python
+      - name: Enable pip for Python 3.9 embedded
+        run: |
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          dist\Xungungo\python39\python.exe get-pip.py
+          del get-pip.py
+
+      # Modify python39._pth to uncomment site import
+      - name: Modify python39._pth
+        run: |
+          powershell -Command "(Get-Content dist\Xungungo\python39\python39._pth) -replace '^#import site', 'import site' | Set-Content dist\Xungungo\python39\python39._pth"
+
+      # Install requirements using embedded Python
+      - name: Install app requirements
+        run: |
+          dist\Xungungo\python39\python.exe -m pip install -r dist\Xungungo\app\requirements.txt
+
+      # Create an installer with Inno Setup
+      - name: Create installer
+        run: |
+          curl -L -o isetup.exe https://jrsoftware.org/download.php/is.exe
+          echo [Setup] > Xungungo.iss
+          echo AppName=Xungungo >> Xungungo.iss
+          echo AppVersion=1.0 >> Xungungo.iss
+          echo DefaultDirName={pf}\Xungungo >> Xungungo.iss
+          echo OutputBaseFilename=XungungoInstaller >> Xungungo.iss
+          echo Source: "dist\Xungungo\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs >> Xungungo.iss
+          isetup.exe /cc Xungungo.iss
