@@ -28,11 +28,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
+          pip install pipreqs
+          pipreqs .
+          pip install -r requeriments.txt
+          del requeriments.txt
 
       # Build the executable
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile win.py
+          pyinstaller --onefile --name Xungungo win.py
 
       # Copy the app folder to the dist directory
       - name: Copy app folder to dist
