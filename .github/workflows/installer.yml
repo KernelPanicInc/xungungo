@@ -63,21 +63,14 @@ jobs:
         run: |
           dist\Xungungo\python39\python.exe -m pip install -r dist\Xungungo\app\requirements.txt
 
-      # Create an installer with Inno Setup
-      - name: Create installer
+      # Create a zip package
+      - name: Create zip package
         run: |
-          curl -L -o isetup.exe https://jrsoftware.org/download.php/is.exe
-          echo [Setup] > Xungungo.iss
-          echo AppName=Xungungo >> Xungungo.iss
-          echo AppVersion=1.0 >> Xungungo.iss
-          echo DefaultDirName={pf}\Xungungo >> Xungungo.iss
-          echo OutputBaseFilename=XungungoInstaller >> Xungungo.iss
-          echo Source: "dist\\Xungungo\\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs >> Xungungo.iss
-          .\isetup.exe /cc Xungungo.iss
+          powershell -Command "Compress-Archive -Path dist\Xungungo\* -DestinationPath dist\Xungungo.zip"
 
-      # Publish the installer as an artifact
-      - name: Upload installer
+      # Publish the zip package as an artifact
+      - name: Upload zip package
         uses: actions/upload-artifact@v4
         with:
-          name: XungungoInstaller
-          path: XungungoInstaller.exe
+          name: XungungoPackage
+          path: dist\Xungungo.zip
