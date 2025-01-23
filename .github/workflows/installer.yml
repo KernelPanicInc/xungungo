@@ -82,7 +82,7 @@ jobs:
 
       # Publish the installer as an artifact
       - name: Upload installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: XungungoInstaller
           path: XungungoInstaller.exe
