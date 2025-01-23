@@ -37,14 +37,14 @@ jobs:
       # Copy the app folder to the dist directory
       - name: Copy app folder to dist
         run: |
-          xcopy app dist\Xungungo\app /E /I
+          xcopy app dist\app /E /I
 
       # Download and extract Python 3.9 embedded
       - name: Download Python 3.9 embedded
         run: |
           curl -L -o python39-embedded.zip https://www.python.org/ftp/python/3.9.13/python-3.9.13-embed-amd64.zip
-          mkdir dist\Xungungo\python39
-          tar -xf python39-embedded.zip -C dist\Xungungo\python39
+          mkdir dist\python39
+          tar -xf python39-embedded.zip -C dist\python39
 
       # Enable pip for embedded Python
       - name: Enable pip for Python 3.9 embedded
@@ -61,11 +61,11 @@ jobs:
       # Install requirements using embedded Python
       - name: Install app requirements
         run: |
-          dist\Xungungo\python39\python.exe -m pip install -r dist\Xungungo\app\requirements.txt
+          dist\python39\python.exe -m pip install -r dist\app\requirements.txt
 
       # Publish the zip package as an artifact
       - name: Upload zip package
         uses: actions/upload-artifact@v4
         with:
           name: XungungoPackage
-          path: dist\Xungungo\
+          path: dist\
