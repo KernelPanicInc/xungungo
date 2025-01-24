@@ -43,7 +43,7 @@ jobs:
       # Download and extract Python 3.9 embedded
       - name: Download Python 3.9 embedded
         run: |
-          curl -L -o python39-embedded.zip https://www.python.org/ftp/python/3.9.13/python-3.9.13-embed-amd64.zip
+          curl -L -o python39-embedded.zip https://www.python.org/ftp/python/3.9.0/python-3.9.0-embed-amd64.zip
           mkdir dist\python39
           tar -xf python39-embedded.zip -C dist\python39
 
