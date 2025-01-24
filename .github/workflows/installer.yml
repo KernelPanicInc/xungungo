@@ -33,7 +33,7 @@ jobs:
       # Build the executable
       - name: Build with PyInstaller
         run: |
-          pyinstaller --noconsole --onefile --name Xungungo win.py
+          pyinstaller --noconsole --onefile --windowed  --name Xungungo win.py
 
       # Copy the app folder to the dist directory
       - name: Copy app folder to dist
