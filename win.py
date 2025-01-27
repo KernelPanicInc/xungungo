@@ -16,9 +16,9 @@ def start_streamlit():
     """Inicia el servidor Streamlit en un hilo separado y muestra las salidas."""
     print("Iniciando Streamlit...")
     ruta_main = "app/Dashboard.py"
-    streamlit_cmd = ["streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=auto"]
+    streamlit_cmd = ["python","-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=auto"]
     if hasattr(sys, '_MEIPASS'):
-        streamlit_cmd = ["python39\python.exe","-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=minimal"]
+        streamlit_cmd = [os.path.join("python","python.exe"),"-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=minimal"]
         
     process = subprocess.Popen(
         streamlit_cmd,
@@ -50,7 +50,7 @@ def wait_for_streamlit():
     url = "http://localhost:8501"
     for _ in range(30):  # Máximo de 30 intentos (30 segundos)
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=5)
             if response.status_code == 200:
                 return True
         except requests.ConnectionError:
