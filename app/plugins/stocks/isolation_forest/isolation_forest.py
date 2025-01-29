@@ -19,6 +19,12 @@ def render(ticker):
     st.sidebar.subheader("Parámetros de Análisis")
     start_date = st.sidebar.date_input("Fecha de inicio", dt.date(2020, 1, 1))
     end_date = st.sidebar.date_input("Fecha de fin", dt.date.today())
+    interval = st.sidebar.selectbox(
+        "Intervalo de Tiempo",
+        options=["1d", "1wk", "1mo", "15m"],
+        index=0,
+        help="Selecciona el intervalo de tiempo para los datos históricos (diario, semanal, mensual, o intradía)."
+    )
 
     # Parámetros de Isolation Forest
     contamination = st.sidebar.slider("Nivel de Contaminación (proporción de anomalías)", min_value=0.01, max_value=0.5, value=0.05, step=0.01)
@@ -31,15 +37,20 @@ def render(ticker):
     # Descargar datos históricos y procesar anomalías
     with st.spinner("Cargando datos históricos y detectando anomalías..."):
         try:
-            data = yf.download(ticker, start=start_date, end=end_date)
+            # Descargar datos con el intervalo seleccionado
+            data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
             data = flatten_columns(data)
             if data.empty:
                 st.warning(f"No se encontraron datos para el ticker {ticker} en el rango de fechas seleccionado.")
                 return
 
+            # Manejo dinámico de la columna de tiempo
+            time_column = "Datetime" if interval in ["15m"] else "Date"
+            data = data.reset_index()  # Asegurarnos de que la columna de tiempo sea accesible
+            data.rename(columns={time_column: "Fecha"}, inplace=True)
+
             # Seleccionar solo la columna de precios de cierre y prepararla para Isolation Forest
-            df = data[['Close']].reset_index()
-            df['Fecha'] = df['Date']
+            df = data[['Fecha', 'Close']]
             df['Close_Normalized'] = (df['Close'] - df['Close'].mean()) / df['Close'].std()
 
             # Aplicar Isolation Forest
