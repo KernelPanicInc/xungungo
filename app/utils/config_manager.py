@@ -1,77 +1,69 @@
 import yaml
-from pathlib import Path
+from typing import Any
 
-class YamlConfigManager:
-    def __init__(self, config_file):
+class ConfigManager:
+    _instance = None
+    
+    def __new__(cls, config_path: str):
+        if cls._instance is None:
+            cls._instance = super(ConfigManager, cls).__new__(cls)
+            cls._instance.config_path = config_path
+            cls._instance.config_data = cls._instance._load_config()
+        return cls._instance
+    
+    def _load_config(self) -> dict:
         """
-        Inicializa el gestor de configuraciones.
-        :param config_file: Ruta al archivo YAML.
+        Carga la configuración desde el archivo YAML.
+        :return: Diccionario con la configuración.
         """
-        self.config_file = Path(config_file)
-        if not self.config_file.exists():
-            # Si el archivo no existe, crearlo vacío
-            self.config_file.write_text(yaml.dump({}))
-
-    def get(self, key, default=None):
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as file:
+                return yaml.safe_load(file) or {}
+        except FileNotFoundError:
+            print(f"Archivo de configuración no encontrado: {self.config_path}")
+            return {}
+        except yaml.YAMLError as e:
+            print(f"Error al leer el archivo YAML: {e}")
+            return {}
+    
+    def get(self, key: str, default: Any = None) -> Any:
         """
-        Obtiene un valor del archivo YAML basado en una clave.
-        :param key: Clave en formato de punto (e.g., "app.title").
+        Obtiene un valor de la configuración.
+        :param key: Clave a buscar en la configuración.
         :param default: Valor por defecto si la clave no existe.
-        :return: Valor correspondiente o el valor por defecto.
+        :return: Valor correspondiente a la clave o el valor por defecto.
         """
-        config = self._read_yaml()
-        keys = key.split(".")
+        keys = key.split('.')
+        value = self.config_data
+        
         for k in keys:
-            if isinstance(config, dict) and k in config:
-                config = config[k]
+            if isinstance(value, dict) and k in value:
+                value = value[k]
+            elif isinstance(value, list) and k.isdigit():
+                index = int(k)
+                if 0 <= index < len(value):
+                    value = value[index]
+                else:
+                    return default
             else:
                 return default
-        return config
-
-    def set(self, key, value):
+        return value
+    
+    def reload(self):
         """
-        Establece un valor en el archivo YAML.
-        :param key: Clave en formato de punto (e.g., "app.title").
-        :param value: Valor a establecer.
+        Recarga la configuración desde el archivo YAML.
         """
-        config = self._read_yaml()
-        keys = key.split(".")
-        d = config
-        for k in keys[:-1]:
-            if k not in d or not isinstance(d[k], dict):
-                d[k] = {}
-            d = d[k]
-        d[keys[-1]] = value
-        self._write_yaml(config)
-
-    def _read_yaml(self):
+        self.config_data = self._load_config()
+    
+    def save(self) -> None:
         """
-        Lee el archivo YAML.
-        :return: Diccionario con los datos del YAML.
+        Guarda la configuración en el archivo YAML.
         """
-        with self.config_file.open("r") as file:
-            return yaml.safe_load(file) or {}
-
-    def _write_yaml(self, data):
-        """
-        Escribe datos al archivo YAML.
-        :param data: Diccionario con los datos a guardar.
-        """
-        with self.config_file.open("w") as file:
-            yaml.safe_dump(data, file, default_flow_style=False, sort_keys=False)
-
-    def delete(self, key):
-        """
-        Elimina una clave del archivo YAML.
-        :param key: Clave en formato de punto (e.g., "app.title").
-        """
-        config = self._read_yaml()
-        keys = key.split(".")
-        d = config
-        for k in keys[:-1]:
-            if k in d and isinstance(d[k], dict):
-                d = d[k]
-            else:
-                return  # La clave no existe
-        d.pop(keys[-1], None)
-        self._write_yaml(config)
+        try:
+            with open(self.config_path, 'w', encoding='utf-8') as file:
+                yaml.safe_dump(self.config_data, file, allow_unicode=True, sort_keys=False)
+        except Exception as e:
+            print(f"Error al guardar el archivo de configuración: {e}")
+    
+    def __repr__(self):
+        return f"ConfigManager({self.config_path})"

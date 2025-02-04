@@ -37,6 +37,7 @@ def obtener_plugins(tipo):
                     "descripcion": module.descripcion,
                     "tipo": module.tipo,
                     "render": module.render,
+                    "module": module,  # Incluye el módulo completo
                 })
             else:
                 st.toast(f"El plugin '{plugin_name}' no tiene los atributos necesarios y será omitido.")

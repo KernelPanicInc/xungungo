@@ -12,6 +12,8 @@ stop_event = threading.Event()
 
 ctypes.windll.user32.SetProcessDpiAwarenessContext(-4)
 
+webview.settings['ALLOW_DOWNLOADS'] = True
+
 def start_streamlit():
     """Inicia el servidor Streamlit en un hilo separado y muestra las salidas."""
     print("Iniciando Streamlit...")
@@ -53,7 +55,7 @@ def wait_for_streamlit():
             response = requests.get(url, timeout=5)
             if response.status_code == 200:
                 return True
-        except requests.ConnectionError:
+        except:
             pass
         time.sleep(1)
     return False

@@ -1,4 +1,4 @@
-name: Build PyInstaller Executable
+name: Build and Package Application
 
 on:
   push:
@@ -17,52 +17,40 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Python
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9' # Cambia a la versión que uses
-
-      # Install dependencies
-      - name: Install dependencies
+      # Download and extract Python 3.12.8 embedded
+      - name: Download Python 3.12.8 embedded
         run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller
-          pip install -r requirements.txt
+          curl -L -o python-embedded.zip https://www.python.org/ftp/python/3.12.8/python-3.12.8-embed-amd64.zip
+          mkdir dist\python
+          tar -xf python-embedded.zip -C dist\python
 
-      # Build the executable
-      - name: Build with PyInstaller
+      # Enable pip for embedded Python 3.12.8
+      - name: Enable pip for Python 3.12.8 embedded
         run: |
-          pyinstaller --noconsole --onefile --windowed  --name Xungungo win.py
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          dist\python\python.exe get-pip.py
+          del get-pip.py
+
+      # Modify python._pth to uncomment site import
+      - name: Modify python._pth
+        run: |
+          powershell -Command "(Get-Content dist\python\python312._pth) -replace '^#import site', 'import site' | Set-Content dist\python\python312._pth"
+
+      # Install app requirements using embedded Python 3.12.8
+      - name: Install app requirements
+        run: |
+          dist\python\python.exe -m pip install -r requirements.txt
 
       # Copy the app folder to the dist directory
       - name: Copy app folder to dist
         run: |
           xcopy app dist\app /E /I
 
-      # Download and extract Python 3.9 embedded
-      - name: Download Python 3.9 embedded
+      # Create a batch file to run the app
+      - name: Create run.bat file
         run: |
-          curl -L -o python39-embedded.zip https://www.python.org/ftp/python/3.9.0/python-3.9.0-embed-amd64.zip
-          mkdir dist\python39
-          tar -xf python39-embedded.zip -C dist\python39
-
-      # Enable pip for embedded Python
-      - name: Enable pip for Python 3.9 embedded
-        run: |
-          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          dist\python39\python.exe get-pip.py
-          del get-pip.py
-
-      # Modify python39._pth to uncomment site import
-      - name: Modify python39._pth
-        run: |
-          powershell -Command "(Get-Content dist\python39\python39._pth) -replace '^#import site', 'import site' | Set-Content dist\python39\python39._pth"
-
-      # Install requirements using embedded Python
-      - name: Install app requirements
-        run: |
-          dist\python39\python.exe -m pip install -r dist\app\requirements.txt
+          echo @echo off > dist\run.bat
+          echo start "" dist\python\pythonw.exe dist\app\win.py >> dist\run.bat
 
       # Publish the zip package as an artifact
       - name: Upload zip package
