@@ -31,10 +31,15 @@ jobs:
           dist\python\python.exe get-pip.py
           del get-pip.py
 
-      # Modify python._pth to uncomment site import
-      - name: Modify python._pth
+      # Modify python312._pth to enable 'site-packages'
+      - name: Modify python312._pth
         run: |
           powershell -Command "(Get-Content dist\python\python312._pth) -replace '^#import site', 'import site' | Set-Content dist\python\python312._pth"
+
+      # Manually install setuptools and wheel (required for package installations)
+      - name: Install setuptools and wheel
+        run: |
+          dist\python\python.exe -m pip install --upgrade setuptools wheel
 
       # Install app requirements using embedded Python 3.12.8
       - name: Install app requirements
