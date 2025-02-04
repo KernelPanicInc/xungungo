@@ -1,0 +1,81 @@
+app:
+  name: ScreenerApp
+  version: '1.0'
+screener:
+- columns:
+  - Perf.1M
+  - Perf.3M
+  - Perf.YTD
+  - Perf.Y
+  - Perf.5Y
+  - Perf.All
+  - beta_1_year
+  - beta_3_year
+  - beta_5_year
+  - Volatility.D
+  - Volatility.W
+  - Volatility.M
+  - Recommend.All
+  - Recommend.MA
+  - Recommend.Other
+  - RSI
+  - AO
+  - CCI20
+  descripcion: Obtiene una lista de símbolos desde una watchlist de TradingView y
+    muestra su rendimiento.
+  nombre: Dr Market - v.2ba 👽
+  tipo: tv_watchlist
+  url: https://www.tradingview.com/watchlists/162767447/
+- columns:
+  - Perf.W
+  - Perf.1M
+  - Perf.3M
+  - Perf.YTD
+  - Perf.Y
+  - Perf.5Y
+  - Perf.All
+  - beta_1_year
+  - beta_3_year
+  - beta_5_year
+  - Volatility.D
+  - Volatility.W
+  - Volatility.M
+  - Recommend.All
+  - Recommend.MA
+  - Recommend.Other
+  - RSI
+  - Mom
+  - AO
+  - CCI20
+  descripcion: Obtiene una lista de símbolos desde una watchlist de TradingView y
+    muestra su rendimiento.
+  nombre: Dr. Market - Small and Mid Caps
+  tipo: tv_watchlist
+  url: https://es.tradingview.com/watchlists/139799472/
+- nombre: Screener Nasdaq Completo
+  descripcion: Obtiene una lista de símbolos desde nasdaq
+  tipo: nasdaq_screener
+- tipo: tv_watchlist
+  nombre: Dr. Market - GSTMTAIP
+  descripcion: ' AI basket'
+  url: https://es.tradingview.com/watchlists/152268890/
+  columns:
+  - Perf.W
+  - Perf.1M
+  - Perf.3M
+  - Perf.YTD
+  - Perf.Y
+  - Perf.5Y
+  - Recommend.All
+- tipo: tv_watchlist
+  nombre: Dr Market IBD IPO
+  descripcion: ''
+  url: https://www.tradingview.com/watchlists/146554119/
+  columns:
+  - Perf.W
+  - Perf.1M
+  - Perf.3M
+  - Perf.YTD
+  - Perf.Y
+  - Perf.5Y
+  - Recommend.All
