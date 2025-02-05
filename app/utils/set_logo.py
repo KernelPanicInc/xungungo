@@ -19,7 +19,7 @@ def set_logo(logo_path = "static/xungungo.png"):
     """
     st.markdown(logo_html, unsafe_allow_html=True)
     # Transparent 1x1 pixel base64 image
-    transparent_pixel = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg=="
+    transparent_pixel = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
     st.logo(
         image=transparent_pixel,
         icon_image=logo_path

@@ -51,12 +51,8 @@ jobs:
         run: |
           xcopy app dist\app /E /I
           xcopy win.py dist\
-
-      # Create a batch file to run the app
-      - name: Create run.bat file
-        run: |
-          echo @echo off > dist\run.bat
-          echo start "" python\pythonw.exe .\win.py >> dist\run.bat
+          tar -xf extras\vclibs.zip -C dist\python\Lib\site-packages\sklearn\.libs
+          tar -xf extras\run.zip -C dist\
 
       # Publish the zip package as an artifact
       - name: Upload zip package

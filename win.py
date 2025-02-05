@@ -14,13 +14,19 @@ ctypes.windll.user32.SetProcessDpiAwarenessContext(-4)
 
 webview.settings['ALLOW_DOWNLOADS'] = True
 
+user_version = False
+
+if "--from-bat" in sys.argv:
+    user_version = True
+    # Puedes hacer alguna acción específica aquí
+
 def start_streamlit():
     """Inicia el servidor Streamlit en un hilo separado y muestra las salidas."""
     print("Iniciando Streamlit...")
     ruta_main = "app/Dashboard.py"
     streamlit_cmd = ["python","-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=auto"]
-    if hasattr(sys, '_MEIPASS'):
-        streamlit_cmd = [os.path.join("python","python.exe"),"-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=minimal"]
+    if user_version:
+        streamlit_cmd = [os.path.join("python","pythonw.exe"),"-m","streamlit", "run", "Dashboard.py", "--server.port=8501", "--server.headless=true", "--client.toolbarMode=minimal"]
         
     process = subprocess.Popen(
         streamlit_cmd,
