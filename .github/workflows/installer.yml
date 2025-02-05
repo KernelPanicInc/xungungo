@@ -51,9 +51,15 @@ jobs:
         run: |
           xcopy app dist\app /E /I
           xcopy win.py dist\
-          tar -xf extras\vclibs.zip -C dist\python\Lib\site-packages\sklearn\.libs
+        
+      # Manually install setuptools and wheel (required for package installations)
+      - name: Unzip run exe
+        run: |
           tar -xf extras\run.zip -C dist\
-
+      - name: Unzip vclibs
+        run: |
+          mkdir dist\python\Lib\site-packages\sklearn\.libs 2>nul
+          tar -xf extras\vclibs.zip -C dist\python\Lib\site-packages\sklearn\.libs
       # Publish the zip package as an artifact
       - name: Upload zip package
         uses: actions/upload-artifact@v4
