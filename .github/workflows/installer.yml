@@ -59,6 +59,7 @@ jobs:
       - name: Unzip vclibs
         run: |
           tar -xf extras\vclibs.zip -C dist\python\Lib\site-packages\sklearn\.libs
+          ls dist\python\Lib\site-packages\sklearn\.libs
       # Publish the zip package as an artifact
       - name: Upload zip package
         uses: actions/upload-artifact@v4
