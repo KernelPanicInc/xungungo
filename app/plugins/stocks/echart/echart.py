@@ -15,6 +15,7 @@ def render(ticker):
     # Ajusta la ruta a tus archivos
     from plugins.stocks.echart.indicators.load_indicators import load_indicators
     from utils.flatten_columns import flatten_columns
+    
     # ====== Parámetros de fecha
     st.sidebar.subheader("Rango de Fechas")
     start_date = st.sidebar.date_input("Fecha inicio", dt.date.today() - dt.timedelta(days=365))
@@ -39,6 +40,20 @@ def render(ticker):
     for o, c, l, h in zip(df["Open"], df["Close"], df["Low"], df["High"]):
         kline_data.append([o, c, l, h])
 
+    volume_list = df["Volume"].tolist()
+
+    # --- Agregar días extras al final para que la última vela no quede pegada ---
+    extra_days = 10
+    if len(df) > 0:
+        last_date = df.index[-1]
+        for i in range(1, extra_days + 1):
+            future_date = last_date + dt.timedelta(days=i)
+            # Agregamos la fecha vacía
+            dates.append(future_date.strftime("%Y-%m-%d"))
+            # Agregamos valores vacíos o cero:
+            kline_data.append(["-", "-", "-", "-"])
+            volume_list.append(0)
+
     # ====== Crear Grid
     grid = Grid(
         init_opts=opts.InitOpts(width="100%", height="800px", theme=ThemeType.LIGHT)
@@ -52,7 +67,7 @@ def render(ticker):
             series_name="Precio",
             y_axis=kline_data,
             itemstyle_opts=opts.ItemStyleOpts(
-                color="#14b143", border_color="#14b143", 
+                color="#14b143", border_color="#14b143",
                 color0="#ef232a", border_color0="#ef232a"
             ),
             yaxis_index=0,
@@ -60,25 +75,24 @@ def render(ticker):
         .set_global_opts(
             title_opts=opts.TitleOpts(title=f"Gráfico {ticker}"),
             xaxis_opts=opts.AxisOpts(
-                type_="category", 
-                is_scale=True, 
-                #boundary_gap=True,
+                type_="category",
+                is_scale=True,
                 axisline_opts=opts.AxisLineOpts(is_on_zero=False)
-                ),
+            ),
             yaxis_opts=opts.AxisOpts(is_scale=True),
             datazoom_opts=[
                 opts.DataZoomOpts(
-                    type_="slider", 
+                    type_="slider",
                     xaxis_index=[0,1],
                     range_start=80,
                     range_end=100,
                 ),
                 opts.DataZoomOpts(
-                    type_="inside", 
+                    type_="inside",
                     xaxis_index=[0,1],
                     pos_left="10%",
                     range_start=80,
-                    range_end=100,      
+                    range_end=100,
                 ),
             ],
             tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="cross"),
@@ -90,9 +104,7 @@ def render(ticker):
         )
     )
 
-
     # ====== Panel de volumen (abajo)
-    volume_list = df["Volume"].tolist()
     volume_chart = (
         Bar()
         .add_xaxis(dates)
@@ -104,21 +116,21 @@ def render(ticker):
         )
         .set_global_opts(
             xaxis_opts=opts.AxisOpts(
-                type_="category", is_scale=True,
+                type_="category",
+                is_scale=True,
                 # Ocultamos label X aquí, pues ya se ve arriba (opcional)
                 axislabel_opts=opts.LabelOpts(is_show=False),
             ),
             yaxis_opts=opts.AxisOpts(is_scale=True),
             datazoom_opts=[
-                # Los xaxis_index deben coincidir con [0,1] para compartir zoom
                 opts.DataZoomOpts(
-                    type_="slider", 
+                    type_="slider",
                     xaxis_index=[0,1],
                     range_start=80,
                     range_end=100,
                 ),
                 opts.DataZoomOpts(
-                    type_="inside", 
+                    type_="inside",
                     xaxis_index=[0,1],
                     range_start=80,
                     range_end=100,
@@ -128,7 +140,6 @@ def render(ticker):
             tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="shadow"),
         )
     )
-
 
     # ====== Cargar plugins
     plugins = load_indicators()
@@ -158,8 +169,7 @@ def render(ticker):
             else:
                 st.warning(f"Plugin {plug.name} sin función esperada.")
 
-
-    # Lo ubicamos en la parte superior del grid (ej. 50% de altura)
+    # Lo ubicamos en la parte superior del grid
     grid.add(
         kline_main,
         grid_opts=opts.GridOpts(
@@ -167,7 +177,7 @@ def render(ticker):
         )
     )
 
-    # Ubicamos el volumen en la mitad inferior (ej. 25% de altura)
+    # Ubicamos el volumen en la parte inferior
     grid.add(
         volume_chart,
         grid_opts=opts.GridOpts(
@@ -175,5 +185,6 @@ def render(ticker):
             height="10%"
         ),
     )
+
     # ====== Render final
     st_pyecharts(grid, height="800px")
