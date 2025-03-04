@@ -19,26 +19,31 @@ def render(ticker):
     st.sidebar.subheader("Parámetros de Análisis")
     start_date = st.sidebar.date_input("Fecha de inicio", dt.date(2020, 1, 1))
     end_date = st.sidebar.date_input("Fecha de fin", dt.date.today())
+
+    # Convertir las fechas seleccionadas a datetime: inicio a las 00:00 y fin a las 23:59
+    start_datetime = dt.datetime.combine(start_date, dt.time.min)
+    end_datetime = dt.datetime.combine(end_date, dt.time(23, 59))
+
     interval = st.sidebar.selectbox(
         "Intervalo de Tiempo",
         options=["1d", "1wk", "1mo", "15m"],
         index=0,
-        help="Selecciona el intervalo de tiempo para los datos históricos (diario, semanal, mensual, o intradía)."
+        help="Selecciona el intervalo de tiempo para los datos históricos (diario, semanal, mensual o intradía)."
     )
 
     # Parámetros de Isolation Forest
     contamination = st.sidebar.slider("Nivel de Contaminación (proporción de anomalías)", min_value=0.01, max_value=0.5, value=0.05, step=0.01)
     n_estimators = st.sidebar.slider("Número de Estimadores", min_value=50, max_value=500, value=100, step=50)
 
-    if start_date > end_date:
+    if start_datetime > end_datetime:
         st.error("La fecha de inicio no puede ser mayor que la fecha de fin.")
         return
 
     # Descargar datos históricos y procesar anomalías
     with st.spinner("Cargando datos históricos y detectando anomalías..."):
         try:
-            # Descargar datos con el intervalo seleccionado
-            data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
+            # Descargar datos con el intervalo seleccionado usando los datetime convertidos
+            data = yf.download(ticker, start=start_datetime, end=end_datetime, interval=interval)
             data = flatten_columns(data)
             if data.empty:
                 st.warning(f"No se encontraron datos para el ticker {ticker} en el rango de fechas seleccionado.")
@@ -49,16 +54,16 @@ def render(ticker):
             data = data.reset_index()  # Asegurarnos de que la columna de tiempo sea accesible
             data.rename(columns={time_column: "Fecha"}, inplace=True)
 
-            # Seleccionar solo la columna de precios de cierre y prepararla para Isolation Forest
-            df = data[['Fecha', 'Close']]
-            df['Close_Normalized'] = (df['Close'] - df['Close'].mean()) / df['Close'].std()
+            # Seleccionar solo la columna de precios de cierre y crear una copia
+            df = data[['Fecha', 'Close']].copy()
+            df.loc[:, 'Close_Normalized'] = (df['Close'] - df['Close'].mean()) / df['Close'].std()
 
-            # Aplicar Isolation Forest
+            # Aplicar Isolation Forest y asignar la predicción
             model = IsolationForest(n_estimators=n_estimators, contamination=contamination, random_state=42)
-            df['Anomaly_Score'] = model.fit_predict(df[['Close_Normalized']])
+            df.loc[:, 'Anomaly_Score'] = model.fit_predict(df[['Close_Normalized']])
 
-            # Etiquetar anomalías (1: normal, -1: anomalía)
-            df['Anomaly'] = df['Anomaly_Score'].apply(lambda x: 'Normal' if x == 1 else 'Anomalía')
+            # Etiquetar anomalías usando .loc
+            df.loc[:, 'Anomaly'] = df['Anomaly_Score'].apply(lambda x: 'Normal' if x == 1 else 'Anomalía')
 
             # Graficar resultados
             st.subheader("Gráfico de Precios y Anomalías")
