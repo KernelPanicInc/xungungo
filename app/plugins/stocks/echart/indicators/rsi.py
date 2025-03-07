@@ -11,7 +11,7 @@ def get_user_params(df = None):
     color = st.sidebar.color_picker("Color de RSI", "#2f4554")
     return {"period": period, "color": color}
 
-def apply_grid(volume_chart, data, dates, user_params):
+def apply_overlay(kline_obj, data, dates, user_params, params):
     from pyecharts.charts import Line
     from pyecharts import options as opts
     import pandas as pd

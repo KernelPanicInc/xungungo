@@ -36,7 +36,7 @@ def get_user_params(data = None):
         "color_sell": color_sell,
     }
 
-def apply_overlay(kline_obj, data, dates, user_params):
+def apply_overlay(kline_obj, data, dates, user_params, params):
     import numpy as np
     from pyecharts.charts import Scatter
     from pyecharts import options as opts

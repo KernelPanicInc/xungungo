@@ -149,6 +149,9 @@ def render(ticker):
     selected_plugins = st.sidebar.multiselect("Indicadores", plugin_names, default=[])
 
     # ====== Aplicar plugins
+    params = {
+        "ticker": ticker,
+    }
     for plug in plugins:
         if plug.name in selected_plugins:
             user_params = {}
@@ -159,7 +162,7 @@ def render(ticker):
             if plugin_type == "overlay" and hasattr(plug, "apply_overlay"):
                 # Se solapa en el chart superior (velas)
                 try:
-                    plug.apply_overlay(kline_main, df, dates, user_params)
+                    plug.apply_overlay(kline_main, df, dates, user_params, params)
                 except Exception as e:
                     st.error(f"Error en plugin {plug.name}: {e}")
                     continue

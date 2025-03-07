@@ -29,7 +29,7 @@ def get_user_params(df = None):
         "opacities": [opacity1, opacity2, opacity3]
     }
 
-def apply_overlay(kline_obj, data, dates, user_params):
+def apply_overlay(kline_obj, data, dates, user_params, params):
     print("Aplicando triple SMA overlay...")
     from pyecharts.charts import Line
     from pyecharts import options as opts
