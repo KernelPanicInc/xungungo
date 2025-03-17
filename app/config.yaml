@@ -28,25 +28,8 @@ screener:
   url: https://www.tradingview.com/watchlists/162767447/
 - columns:
   - Perf.W
-  - Perf.1M
   - Perf.3M
   - Perf.YTD
-  - Perf.Y
-  - Perf.5Y
-  - Perf.All
-  - beta_1_year
-  - beta_3_year
-  - beta_5_year
-  - Volatility.D
-  - Volatility.W
-  - Volatility.M
-  - Recommend.All
-  - Recommend.MA
-  - Recommend.Other
-  - RSI
-  - Mom
-  - AO
-  - CCI20
   descripcion: Obtiene una lista de símbolos desde una watchlist de TradingView y
     muestra su rendimiento.
   nombre: Dr. Market - Small and Mid Caps
