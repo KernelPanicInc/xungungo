@@ -96,4 +96,4 @@ def on_webview_close():
 
 
 window.events.closed += on_webview_close
-webview.start(debug=False, icon="app/static/xungungo.png")
+webview.start(debug=True, icon="app/static/xungungo.png")
