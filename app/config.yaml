@@ -21,6 +21,10 @@ screener:
   - RSI
   - AO
   - CCI20
+  - close
+  - open
+  - volume
+  - change_percent
   descripcion: Obtiene una lista de símbolos desde una watchlist de TradingView y
     muestra su rendimiento.
   nombre: Dr Market - v.2ba 👽

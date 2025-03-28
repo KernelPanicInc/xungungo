@@ -31,6 +31,7 @@ def render_config(screener_config):
     # Configurar el parámetro columns usando un multiselect
     # Definir las opciones disponibles (puedes modificar o ampliar esta lista según tus necesidades)
     opciones_columns = [
+        "close", "open", "high", "low", "volume",
         "Perf.W", "Perf.1M", "Perf.3M", "Perf.YTD",
         "Perf.Y", "Perf.5Y", "Perf.All", "Recommend.All", "beta_1_year",
         "beta_3_year", "beta_5_year", "Volatility.D",
@@ -38,7 +39,7 @@ def render_config(screener_config):
         "Recommend.Other", "RSI", "Mom", "AO", "CCI20"
     ]
     # Obtener el valor actual; si no existe, usar una lista por defecto
-    default_columns = ["Perf.W", "Perf.1M", "Perf.3M", "Perf.YTD", "Perf.Y", "Perf.5Y", "Recommend.All"]
+    default_columns = ["close","Perf.W", "Perf.1M", "Perf.3M", "Perf.YTD", "Perf.Y", "Perf.5Y", "Recommend.All"]
     current_columns = screener_config.get("columns", default_columns)
     # Si current_columns viene en forma de cadena, convertirla a lista
     if isinstance(current_columns, str):
