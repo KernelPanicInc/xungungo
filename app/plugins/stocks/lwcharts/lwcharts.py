@@ -111,6 +111,7 @@ def render(ticker):
             if hasattr(plug, "get_user_params"):
                 user_params = plug.get_user_params(data)
                 user_params["is_dark"] = is_dark
+                user_params["ticker"] = ticker
             plug.apply(charts_config, data, user_params)
 
     st.subheader("Gráfico Candlestick")
