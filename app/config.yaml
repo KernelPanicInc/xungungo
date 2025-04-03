@@ -66,3 +66,23 @@ screener:
   - Perf.Y
   - Perf.5Y
   - Recommend.All
+dashboard:
+  num_columnas: 2
+  widget:
+    Gráfico AAPL:
+      ticker: AAPL
+      interval: 1d
+      show_volume: false
+      chart_height: 300
+      period: 1y
+      type: chart
+      is_dark: true
+    Grafico SPX:
+      type: chart
+      ticker: ^SPX
+      period: 1d
+      interval: 1m
+      is_dark: true
+    Fear & Greed:
+      url: https://production.dataviz.cnn.io/index/fearandgreed/graphdata
+      type: feargreed

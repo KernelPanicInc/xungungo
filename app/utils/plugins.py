@@ -12,7 +12,6 @@ def obtener_plugins(tipo):
     Returns:
         list[dict]: Una lista de diccionarios con la información de cada plugin (nombre, descripcion, tipo, render).
     """
-    #st.info(f"Cargando plugins de tipo '{tipo}'...")
     plugins_dir = os.path.join("plugins", tipo)
     plugins = []
 
@@ -20,17 +19,25 @@ def obtener_plugins(tipo):
         raise FileNotFoundError(f"No se encontró el directorio '{plugins_dir}'.")
 
     for archivo in os.listdir(plugins_dir):
-        #st.info(f"Cargando plugin '{archivo}'...")
-        if os.path.isdir(os.path.join(plugins_dir, archivo)) and os.path.join(plugins_dir, archivo, f'{archivo}.py'):  # Solo cargar archivos Python
-            plugin_path = os.path.join(plugins_dir, archivo, f'{archivo}.py')
+        # Ignorar directorios __pycache__
+        if archivo == "__pycache__":
+            continue
+
+        ruta_plugin = os.path.join(plugins_dir, archivo)
+        # Solo procesar si es un directorio y contiene un archivo Python con el mismo nombre
+        if os.path.isdir(ruta_plugin):
+            plugin_file = os.path.join(ruta_plugin, f"{archivo}.py")
+            if not os.path.exists(plugin_file):
+                continue  # Omitir si el archivo Python no existe
+
             plugin_name = os.path.splitext(archivo)[0]
             
             # Cargar el módulo dinámicamente
-            spec = importlib.util.spec_from_file_location(plugin_name, plugin_path)
+            spec = importlib.util.spec_from_file_location(plugin_name, plugin_file)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             
-            # Verificar que el plugin tiene los atributos requeridos
+            # Verificar que el plugin tenga los atributos requeridos
             if hasattr(module, "nombre") and hasattr(module, "descripcion") and hasattr(module, "tipo") and hasattr(module, "render"):
                 plugins.append({
                     "nombre": module.nombre,
