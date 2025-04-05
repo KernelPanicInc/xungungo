@@ -1,5 +1,7 @@
 import datetime as dt
 import streamlit as st
+import yfinance as yf
+from utils.flatten_columns import flatten_columns
 
 nombre = "Charts"
 descripcion = "Plugin con panel de velas arriba y volumen abajo (opcional) sin solaparse."
@@ -12,7 +14,7 @@ default_config = {
     "end_date": dt.date.today().isoformat(),
     "interval": "1d",
     "show_volume": True,
-    "chart_height": 400  # Altura por defecto del gráfico de velas
+    "height": 400  # Altura por defecto del gráfico de velas
 }
 
 def config(current_config: dict) -> dict:
@@ -27,9 +29,8 @@ def config(current_config: dict) -> dict:
     end_value = current_config.get("end_date", default_config["end_date"])
     interval_value = current_config.get("interval", default_config["interval"])
     show_volume_value = current_config.get("show_volume", default_config["show_volume"])
-    chart_height_value = current_config.get("chart_height", default_config["chart_height"])
+    height_value = current_config.get("height", default_config["height"])
 
-    # Inputs principales
     st.write("### Configuración Principal")
     ticker = st.text_input("Ticker", value=ticker_value)
     period = st.text_input("Period (opcional)", value=period_value)
@@ -51,7 +52,7 @@ def config(current_config: dict) -> dict:
         except Exception:
             end_date = st.date_input("Fecha de fin", value=dt.date.today())
     else:
-        # Si definimos 'period', no necesitamos start_date y end_date
+        # Si se define 'period', no se usan start_date y end_date
         start_date = dt.datetime.strptime(start_value, "%Y-%m-%d").date()
         end_date = dt.datetime.strptime(end_value, "%Y-%m-%d").date()
 
@@ -72,25 +73,23 @@ def config(current_config: dict) -> dict:
     )
 
     st.write("### Opciones de Gráfico")
-    # Checkbox para mostrar u ocultar volumen
     show_volume = st.checkbox("Mostrar Volumen", value=show_volume_value, help="Activa o desactiva el gráfico de volumen debajo de las velas.")
 
-    # Slider o number_input para la altura del panel de velas
-    chart_height = st.slider(
+    height = st.slider(
         "Altura del gráfico de velas (px)",
         min_value=200,
         max_value=1000,
-        value=chart_height_value,
+        value=height_value,
         step=50,
         help="Controla la altura en píxeles del panel de velas."
     )
 
-    # Construimos el diccionario final
+    # Construir el diccionario final
     new_config = {
         "ticker": ticker,
         "interval": interval,
         "show_volume": show_volume,
-        "chart_height": chart_height
+        "height": height
     }
 
     if period:
@@ -106,15 +105,13 @@ def render(config: dict):
     Renderiza el gráfico de velas y, opcionalmente, el volumen, usando lightweight-charts.
     Lee la configuración y descarga datos con yfinance.
     """
-    import yfinance as yf
     from streamlit_lightweight_charts import renderLightweightCharts
-    from utils.flatten_columns import flatten_columns
 
     # Extraer parámetros
     ticker = config.get("ticker", default_config["ticker"])
     interval = config.get("interval", default_config["interval"])
     show_volume = config.get("show_volume", default_config["show_volume"])
-    chart_height = config.get("chart_height", default_config["chart_height"])
+    height = int(config.get("height", default_config["height"]))-81  # Ajustar altura para evitar scroll
 
     period_config = config.get("period", None)
     if not period_config:
@@ -128,7 +125,7 @@ def render(config: dict):
             end_date = dt.date.today()
         end_datetime = dt.datetime.combine(end_date, dt.time(23, 59))
     
-    # Se asume que hay una prop "is_dark" para ajuste de colores
+    # Se asume que hay una prop "is_dark" para ajuste de colores (si no existe, se usa False)
     is_dark = config.get("is_dark", False)
     bg_color = "#1E1E1E" if is_dark else "#CCCCCC"
     text_color = "white" if is_dark else "black"
@@ -180,7 +177,7 @@ def render(config: dict):
     # Panel superior: gráfico de velas
     chart_candles = {
         "chart": {
-            "height": chart_height,  # Altura configurable
+            "height": height,  # Usar "height" de la configuración
             "grid": grid,
             "layout": {
                 "background": {"type": "solid", "color": bg_color},
@@ -211,7 +208,7 @@ def render(config: dict):
 
     charts_config = [chart_candles]
 
-    # Panel inferior: volumen (opcional)
+    # Panel inferior: gráfico de volumen (opcional)
     if show_volume:
         chart_volume = {
             "chart": {
@@ -239,6 +236,5 @@ def render(config: dict):
         }
         charts_config.append(chart_volume)
 
-    # Renderizar los gráficos
     from streamlit_lightweight_charts import renderLightweightCharts
     renderLightweightCharts(charts_config)

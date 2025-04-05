@@ -73,16 +73,49 @@ dashboard:
       ticker: AAPL
       interval: 1d
       show_volume: false
-      chart_height: 300
+      height: 350
       period: 1y
       type: chart
+      position: 3
       is_dark: true
     Grafico SPX:
-      type: chart
       ticker: ^SPX
-      period: 1d
       interval: 1m
+      show_volume: false
+      height: 350
+      period: 1d
+      type: chart
+      position: 4
       is_dark: true
     Fear & Greed:
       url: https://production.dataviz.cnn.io/index/fearandgreed/graphdata
+      height: 350
+      line_color: '#1f77b4'
+      bg_color: '#ffffff'
+      text_color: '#000000'
       type: feargreed
+      position: 2
+      is_dark: true
+    Day Gainers:
+      query_mode: day_gainers
+      custom_query: ''
+      offset: 0
+      size: 10
+      sortField: regular_market_change
+      sortAsc: false
+      height: 350
+      type: screen
+      position: 1
+      is_dark: true
+    Frases:
+      lang: es
+      type: quote
+      position: 4
+      is_dark: true
+    Donaciones:
+      mode: html
+      content: '<a href="https://www.buymeacoffee.com/fiambre" target="_blank"><img
+        src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy
+        Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>'
+      type: custom_content
+      position: 5

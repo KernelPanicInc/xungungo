@@ -23,19 +23,17 @@ def render():
         st.warning("No hay widgets configurados en 'dashboard.widget'.")
         return
     
-    widget_items = list(widgets_config.items())
+    # Ordenar los widgets por la propiedad "position" (valor por defecto 0 si no existe)
+    widget_items = sorted(widgets_config.items(), key=lambda x: x[1].get("position", 0))
     
     # Crear columnas para mostrar los widgets
     columnas = st.columns(num_columnas)
     
     # Detectar el tema para ajustar colores en los plugins
     theme = st_theme()
-    if theme is not None:
-        is_dark = (theme.get("base") == "dark")
-    else:
-        is_dark = True  # Valor por defecto si no se puede detectar el tema
+    is_dark = (theme.get("base") == "dark") if theme is not None else True
 
-    # Iterar por cada widget
+    # Iterar por cada widget ordenado
     for i, (widget_name, widget_conf) in enumerate(widget_items):
         widget_type = widget_conf.get("type")
         if not widget_type:
@@ -48,9 +46,14 @@ def render():
             st.error(f"No se encontró un plugin para '{widget_name}' con tipo '{widget_type}'.")
             continue
         
-        # Mostrar el widget en la columna correspondiente
         with columnas[i % num_columnas]:
-            with st.container():
-                # Pasar is_dark para que el plugin ajuste sus colores
-                widget_conf["is_dark"] = is_dark
-                plugin["render"](widget_conf)
+            # Si se definió "height" en la configuración, se pasa al contenedor
+            if "height" in widget_conf:
+                height_val = widget_conf["height"]
+                with st.container(height=height_val):
+                    widget_conf["is_dark"] = is_dark
+                    plugin["render"](widget_conf)
+            else:
+                with st.container(border=True):
+                    widget_conf["is_dark"] = is_dark
+                    plugin["render"](widget_conf)
