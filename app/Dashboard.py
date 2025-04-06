@@ -10,5 +10,3 @@ st.set_page_config(
 set_logo.set_logo()
 
 dashboard.render()
-#st.switch_page("pages/1_Stocks.py")
-
