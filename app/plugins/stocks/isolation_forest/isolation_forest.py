@@ -267,10 +267,64 @@ def render(ticker):
                 charts_config[0]["chart"]["layout"]["textColor"] = "white"
                 charts_config[0]["chart"]["watermark"]["color"] = "#CCC"
                 charts_config[0]["chart"]["grid"] = {
-                    "vertLines": { "color": '#444' },
-                    "horzLines": { "color": '#444' },
+                    "vertLines": { "color": "#444" },
+                    "horzLines": { "color": "#444" },
                 }
                 charts_config[0]["series"][0]["options"]["color"] = "#2962FF"
+
+            norm_score_series = []
+            for i, row in df.iterrows():
+                time_val = int(row["Fecha"].timestamp())
+                norm_score_series.append({
+                    "time": time_val,
+                    "value": float(row["norm_score"]),
+                })
+
+            # Configuración del gráfico para el norm score (panel inferior)
+            norm_chart = {
+                "chart": {
+                    "height": 200,
+                    "layout": {
+                        "background": {"type": "solid", "color": "#FFFFFF"},
+                        "textColor": "black"
+                    },
+                    "timeScale": {
+                        "timeVisible": True,
+                        "secondsVisible": False
+                    },
+                    "watermark": {
+                        "visible": True,
+                        "text": f'Norm Score para {ticker} de {start_date} a {end_date}',
+                        "fontSize": 12,
+                        "lineHeight": 50,
+                        "color": "rgba(0, 0, 0, 0.5)",
+                        "horzAlign": "left",
+                        "vertAlign": "top"
+                    }
+                },
+                "series": [{
+                    "type": "Line",
+                    "data": norm_score_series,
+                    "options": {
+                        "lineWidth": 1,
+                        "color": "#FF00FF",
+                        "opacity": 1.0,
+                        "title": "Norm Score"
+                    }
+                }]
+            }
+
+            if theme["base"] == "dark":
+                norm_chart["chart"]["layout"]["background"]["color"] = "#1c1c1c"
+                norm_chart["chart"]["layout"]["textColor"] = "white"
+                norm_chart["chart"]["watermark"]["color"] = "#CCC"
+                norm_chart["chart"]["grid"] = {
+                    "vertLines": { "color": "#444" },
+                    "horzLines": { "color": "#444" },
+                }
+                norm_chart["series"][0]["options"]["color"] = "#2962FF"
+
+            charts_config.append(norm_chart)
 
             st.subheader("Gráfico de Precios y Anomalías")
             renderLightweightCharts(charts_config, key="myAnomalyChart")

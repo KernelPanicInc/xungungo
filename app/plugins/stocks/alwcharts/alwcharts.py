@@ -10,7 +10,7 @@ def render(ticker):
     from streamlit_lightweight_charts import renderLightweightCharts
     from streamlit_theme import st_theme
     from utils.flatten_columns import flatten_columns
-    from plugins.stocks.lwcharts.indicators.load_indicators import load_indicators
+    from plugins.stocks.alwcharts.indicators.load_indicators import load_indicators
 
     theme = st_theme()
     is_dark = theme.get("base") == "dark"

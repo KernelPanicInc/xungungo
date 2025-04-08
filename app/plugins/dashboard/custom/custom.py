@@ -40,13 +40,12 @@ def config(current_config: dict) -> dict:
     return {"mode": mode, "content": content, "height": height}
 
 def render(config: dict):
-    st.write("### Contenido Personalizado")
     mode = config.get("mode", default_config["mode"])
     content = config.get("content", default_config["content"])
-    
+    height = int(config.get("height", default_config["height"]))-40
     if mode == "markdown":
         st.markdown(content, unsafe_allow_html=True)
     elif mode == "html":
-        components.html(content)
+        components.html(content, height=height)
     else:
         st.write("Modo desconocido.")

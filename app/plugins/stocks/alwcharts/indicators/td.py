@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-from plugins.stocks.lwcharts.indicators.td.td_setup import calculate_td_setup
-from plugins.stocks.lwcharts.indicators.td.td_countdown import calculate_td_countdown
+from plugins.stocks.alwcharts.indicators.td.td_setup import calculate_td_setup
+from plugins.stocks.alwcharts.indicators.td.td_countdown import calculate_td_countdown
 
 name = "TD Sequential - Setup + Countdown"
 description = "Detecta el TD Setup y Countdown en módulos separados para mayor organización."

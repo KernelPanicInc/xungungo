@@ -69,8 +69,8 @@ screener:
 dashboard:
   num_columnas: 2
   widget:
-    Gráfico AAPL:
-      ticker: AAPL
+    Gráfico VIX:
+      ticker: ^VIX
       interval: 1d
       show_volume: false
       height: 350
@@ -89,7 +89,7 @@ dashboard:
       is_dark: true
     Fear & Greed:
       url: https://production.dataviz.cnn.io/index/fearandgreed/graphdata
-      height: 350
+      height: 300
       line_color: '#1f77b4'
       bg_color: '#ffffff'
       text_color: '#000000'
@@ -105,18 +105,39 @@ dashboard:
       sortAsc: false
       height: 350
       type: screen
-      position: 0
+      position: 4
       is_dark: true
     Frases:
       lang: es
       height: 300
       type: quote
-      position: 4
+      position: 0
+      is_dark: true
     Donaciones:
       mode: html
-      content: '<a href="https://www.buymeacoffee.com/fiambre" target="_blank"><img
-        src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy
-        Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>'
+      content: "<div style=\"font-family: 'Montserrat', sans-serif; border-radius:\
+        \ 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); text-align:\
+        \ center; max-width: 600px; margin: auto;\">\n  <h1 style=\"color: #CCC; margin-bottom:\
+        \ 10px;\">¡Gracias por usar nuestro software!</h1>\n  <p style=\"font-size:\
+        \ 18px; color: #CCC; margin-bottom: 20px;\">\n    Si este software te ha ayudado\
+        \ a mejorar tu productividad o a alcanzar tus objetivos, considera hacer una\
+        \ donación para apoyar el proyecto. ¡Tu aporte es fundamental para seguir\
+        \ innovando y mejorando!\n  </p>\n  <div style=\"margin-top: 20px;\">\n  \
+        \  <a href=\"https://www.buymeacoffee.com/fiambre\" target=\"_blank\">\n \
+        \     <img src=\"https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png\"\
+        \ alt=\"Buy Me A Coffee\" style=\"height: 60px !important; width: 217px !important;\"\
+        >\n    </a>\n  </div>\n</div>"
+      height: 400
       type: custom_content
+      position: 6
+    IT Stocks:
+      query_mode: growth_technology_stocks
+      custom_query: ''
+      offset: 0
+      size: 10
+      sortField: ticker
+      sortAsc: false
+      height: 350
+      type: screen
       position: 5
       is_dark: true

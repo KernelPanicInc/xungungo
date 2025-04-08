@@ -111,7 +111,7 @@ def render(config: dict):
     ticker = config.get("ticker", default_config["ticker"])
     interval = config.get("interval", default_config["interval"])
     show_volume = config.get("show_volume", default_config["show_volume"])
-    height = int(config.get("height", default_config["height"]))-81  # Ajustar altura para evitar scroll
+    height = int(config.get("height", default_config["height"]))-39  # Ajustar altura para evitar scroll
 
     period_config = config.get("period", None)
     if not period_config:
@@ -134,8 +134,6 @@ def render(config: dict):
         "vertLines": {"color": '#444'},
         "horzLines": {"color": '#444'},
     } if is_dark else {}
-
-    st.write(f"**Gráfico Candlestick y Volumen** para el ticker: **{ticker}**")
 
     with st.spinner("Cargando datos históricos..."):
         if period_config:
