@@ -58,7 +58,7 @@ def render(config: dict):
     con Plotly. Los colores se ajustan según config["is_dark"] (pasado desde dashboard_render)
     y el alto es configurable.
     """
-    st.write("Fear & Greed Gauge")
+    st.write("Fear & Greed")
 
     url = config.get("url", default_config["url"])
     height = int(config.get("height", default_config["height"]))-74  # Ajustar altura para evitar scroll
