@@ -2,6 +2,18 @@ import streamlit as st
 from utils.config_manager import ConfigManager
 from utils.plugins import obtener_plugins
 
+def normalize_positions(config_manager: ConfigManager):
+    """
+    Reordena todos los widgets asignándoles posiciones consecutivas (0, 1, 2, ...)
+    para asegurarse de que no se repitan.
+    """
+    widget_section = config_manager.config_data.setdefault("dashboard", {}).setdefault("widget", {})
+    # Ordenar widgets usando la posición actual o 0 por defecto
+    ordered = sorted(widget_section.items(), key=lambda x: x[1].get("position", 0))
+    for i, (wname, wconf) in enumerate(ordered):
+        wconf["position"] = i
+    config_manager.save()
+
 def get_ordered_widgets(config_manager: ConfigManager):
     """
     Retorna una lista de tuplas (widget_name, widget_conf) ordenada según el valor de 'position'.
@@ -51,8 +63,10 @@ def move_widget(config_manager: ConfigManager, widget_name: str, direction: str)
         next_conf["position"], curr_conf["position"] = curr_pos, next_pos
     else:
         st.error("Dirección no válida.")
+        return
 
     config_manager.save()
+    normalize_positions(config_manager)
     st.rerun()
 
 def render():
@@ -104,6 +118,7 @@ def delete_widget(config_manager: ConfigManager, widget_name: str):
         del widget_section[widget_name]
         config_manager.save()
         st.warning(f"Se eliminó el widget '{widget_name}'.")
+        normalize_positions(config_manager)
         st.rerun()
     else:
         st.info("El widget ya no existe.")
@@ -128,7 +143,6 @@ def configure_widget_dialog(config_manager: ConfigManager, widget_name: str, wid
         return
 
     st.write("**Configuración específica del plugin:**")
-    # Llamamos a la función config() del plugin, que MUESTRA inputs y RETORNA un dict final
     nueva_config = plugin["module"].config(widget_conf)
 
     if st.button("Guardar Cambios"):
@@ -136,16 +150,14 @@ def configure_widget_dialog(config_manager: ConfigManager, widget_name: str, wid
             st.error("El plugin no devolvió una configuración válida.")
             return
 
-        # Aseguramos que se mantenga el 'type'
         nueva_config["type"] = widget_type
-        # Preservamos el valor de "position" del widget original
         if "position" in widget_conf:
             nueva_config["position"] = widget_conf["position"]
 
         dashboard_widget = config_manager.config_data.setdefault("dashboard", {}).setdefault("widget", {})
         dashboard_widget[widget_name] = nueva_config
         config_manager.save()
-
+        normalize_positions(config_manager)
         st.success("Configuración guardada correctamente.")
         st.rerun()
 
@@ -184,10 +196,11 @@ def add_widget_dialog(config_manager: ConfigManager, existing_names: list):
             return
 
         new_config["type"] = selected_plugin_type
-        # Asignar una posición nueva: al final de la lista (usamos la longitud actual)
+        # Asignar posición nueva: usar la longitud actual y luego normalizar
         ordered = get_ordered_widgets(config_manager)
         new_config["position"] = len(ordered)
         config_manager.config_data.setdefault("dashboard", {}).setdefault("widget", {})[widget_name] = new_config
         config_manager.save()
+        normalize_positions(config_manager)
         st.success(f"Se agregó el nuevo widget: '{widget_name}'.")
         st.rerun()

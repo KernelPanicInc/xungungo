@@ -76,7 +76,7 @@ dashboard:
       height: 350
       period: 1y
       type: chart
-      position: 3
+      position: 2
       is_dark: true
     Grafico SPX:
       ticker: ^SPX
@@ -85,7 +85,7 @@ dashboard:
       height: 350
       period: 1d
       type: chart
-      position: 4
+      position: 3
       is_dark: true
     Fear & Greed:
       url: https://production.dataviz.cnn.io/index/fearandgreed/graphdata
@@ -94,7 +94,7 @@ dashboard:
       bg_color: '#ffffff'
       text_color: '#000000'
       type: feargreed
-      position: 2
+      position: 1
       is_dark: true
     Day Gainers:
       query_mode: day_gainers
@@ -105,13 +105,13 @@ dashboard:
       sortAsc: false
       height: 350
       type: screen
-      position: 1
+      position: 0
       is_dark: true
     Frases:
       lang: es
+      height: 300
       type: quote
       position: 4
-      is_dark: true
     Donaciones:
       mode: html
       content: '<a href="https://www.buymeacoffee.com/fiambre" target="_blank"><img
@@ -119,3 +119,4 @@ dashboard:
         Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>'
       type: custom_content
       position: 5
+      is_dark: true

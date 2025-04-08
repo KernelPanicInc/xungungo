@@ -3,11 +3,12 @@ import wikiquote
 import html
 
 nombre = "Frase del Día"
-descripcion = "Plugin que muestra la frase del día con HTML estilizado, removiendo caracteres especiales al inicio y final, y adaptándose al modo oscuro."
+descripcion = "Plugin que muestra la frase del día con HTML estilizado, removiendo caracteres especiales y adaptándose al modo oscuro, con altura configurable."
 tipo = "quote"
 
 default_config = {
-    "lang": "es"
+    "lang": "es",
+    "height": 300  # Altura por defecto en píxeles
 }
 
 def config(current_config: dict) -> dict:
@@ -20,11 +21,19 @@ def config(current_config: dict) -> dict:
         ),
         help="Selecciona el idioma en el que se mostrará la frase del día."
     )
-    return {"lang": lang}
+    height = st.slider(
+        "Altura del widget (px)",
+        min_value=100,
+        max_value=600,
+        value=current_config.get("height", default_config["height"]),
+        step=50,
+        help="Define la altura en píxeles del contenedor de la frase."
+    )
+    return {"lang": lang, "height": height}
 
 def render(config: dict):
-    st.write("### Frase del Día")
     lang = config.get("lang", default_config["lang"])
+    height = int(config.get("height", default_config["height"]))-70  # Restar 30px para el margen superior e inferior
     # Se espera que config["is_dark"] venga desde el dashboard (por defecto, False)
     is_dark = config.get("is_dark", False)
     
@@ -57,7 +66,7 @@ def render(config: dict):
         border = "1px solid #ddd"
         box_shadow = "0 4px 8px rgba(0,0,0,0.1)"
 
-    # Generar HTML estilizado para un card moderno
+    # Generar HTML estilizado para un "card" moderno usando la altura configurada
     html_content = f"""
     <div style="
          max-width: 800px;
@@ -68,6 +77,8 @@ def render(config: dict):
          box-shadow: {box_shadow};
          background: {bg_gradient};
          font-family: 'Helvetica', sans-serif;
+         height: {height}px;
+         overflow: auto;
          ">
          <p style="
              font-size: 1.5em;
