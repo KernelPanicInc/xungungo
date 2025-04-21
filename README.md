@@ -1,6 +1,6 @@
-# 📈 Xungungo
+# 📈 Xungungo Stocks Analytics
 
-**Xungungo** is a desktop application (built with [Streamlit](https://streamlit.io/)) that makes it dead‑simple to explore stocks, overlay technical indicators and keep an eye on market news — all through an intuitive point‑and‑click interface.
+**Xungungo** is a desktop application (Terminal) (built with [Streamlit](https://streamlit.io/)) that makes it dead‑simple to explore stocks, overlay technical indicators and keep an eye on market news — all through an intuitive point‑and‑click interface.
 
 ---
 
