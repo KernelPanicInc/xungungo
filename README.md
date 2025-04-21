@@ -1,103 +1,102 @@
 # 📈 Xungungo
 
-**Xungungo** es una aplicación de escritorio basada en [Streamlit](https://streamlit.io/) que facilita el análisis de acciones, la visualización de indicadores técnicos y la consulta de noticias financieras, todo desde una interfaz amigable.
+**Xungungo** is a desktop application (built with [Streamlit](https://streamlit.io/)) that makes it dead‑simple to explore stocks, overlay technical indicators and keep an eye on market news — all through an intuitive point‑and‑click interface.
 
 ---
 
-## 🧭 ¿Qué puedes hacer con Xungungo?
+## 🧭 What can I do with Xungungo?
 
-- 🔍 **Buscar** cualquier acción por su símbolo (AAPL, MSFT, TSLA…).
-- 📊 **Graficar** velas e historial de precios con un clic.
-- 📈 **Añadir indicadores** populares (SMA, RSI, MACD y más).
-- 📰 **Leer noticias** recientes sobre el mercado.
-- 🧩 **Activar plugins** que amplían la funcionalidad (screeners, dark‑pools, forecasting, etc.).
-
----
-
-## 🚀 Instalación rápida (Windows)
-
-1. Ve a la pestaña **Releases** del repositorio.
-2. Descarga el instalador más reciente (`Xungungo.zip`).
-3. Ejecuta el asistente y sigue los pasos (no necesitas tener Python instalado).
-4. Al terminar, encontrarás un acceso directo en tu menú Inicio.
-
-> **¡Listo!** Inicia Xungungo y empieza a explorar los mercados.
+- 🔍 **Look up** any stock by its ticker (AAPL, MSFT, TSLA…).
+- 📊 **Plot** interactive candlestick & volume charts instantly.
+- 📈 **Add indicators** such as SMA, RSI, MACD…and more.
+- 📰 **Read the latest headlines** without leaving the app.
+- 🧩 **Enable plugins** for screeners, dark‑pool flow, forecasting, and other views.
 
 ---
 
-## ⚙️ Instalación manual (avanzada / otras plataformas)
+## 🚀 Quick install (Windows)
 
-### Requisitos
+| | |
+|---|---|
+| **1. Download** | Go to the project **Releases** tab and grab the latest `Xungungo.zip`. |
+| **2. Run** | Double‑click the installer and follow the wizard (Python is embedded — nothing else to install). |
+| **3. Launch** | A shortcut appears in your Start Menu. Fire it up and start exploring! |
 
-- **Python ≥ 3.9**
-- Git (opcional, para clonar el repositorio)
+> That’s it — no command line required.
 
-### Pasos
+---
+
+## ⚙️ Manual install (advanced / macOS & Linux)
+
+### Prerequisites
+
+* Python ≥ 3.9
+* (Optional) Git, if you prefer cloning over downloading ZIPs.
+
+### Steps
 
 ```bash
-# 1. Clona o descarga el proyecto
-$ git clone https://github.com/tuusuario/xungungo.git
+# 1. Clone or download the repo
+$ git clone https://github.com/your‑username/xungungo.git
 $ cd xungungo
 
-# 2. Crea (opcional) y activa un entorno virtual
+# 2. (Optional) create & activate a virtual environment
 $ python -m venv venv
-$ source venv/bin/activate   # Linux/macOS
-# .\venv\Scripts\activate  # Windows PowerShell
+$ source venv/bin/activate   # on Linux/macOS
+# .\venv\Scripts\activate  # on Windows PowerShell
 
-# 3. Instala dependencias
+# 3. Install dependencies
 $ pip install -r requirements.txt
 
-# 4. Ejecuta la app
+# 4. Run the app
 $ streamlit run app/Dashboard.py
 ```
 
-La aplicación se abrirá automáticamente en tu navegador predeterminado.
+Your default browser will open automatically.
 
 ---
 
-## 🧩 Plugins incluidos
+## 🧩 Built‑in plugins
 
-| Plugin                     | Descripción                                      |
-| -------------------------- | ------------------------------------------------ |
-| **Charts**                 | Gráfico principal de velas + volumen             |
-| **SMA (3 Medias Móviles)** | Añade hasta tres medias móviles configurables    |
-| **Screeners**              | Lista acciones que cumplen criterios específicos |
-| **Dark Pools**             | Muestra actividad inusual en mercados oscuros    |
-| **News (Bloomberg, etc.)** | Noticias financieras recientes                   |
+| Plugin | What it does |
+| --- | --- |
+| **Charts** | Main candlestick + volume view |
+| **SMA (3 moving averages)** | Overlay up to three configurable moving averages |
+| **Screeners** | Surf lists of stocks that meet custom criteria |
+| **Dark Pools** | Spot unusual dark‑pool activity |
+| **News (Bloomberg, etc.)** | Pull in the freshest market headlines |
 
-*(Esta lista crece de forma constante; revisa la barra lateral para ver todos los disponibles.)*
-
----
-
-## 📸 Capturas de pantalla
-
-> Próximamente: aquí añadiremos imágenes de la interfaz, ejemplos de gráficos y la vista de plugins para que te hagas una idea rápida de cómo luce Xungungo.
+> The list keeps growing — check the sidebar to see what’s new.
 
 ---
 
-## 🖥️ Requisitos principales (modo manual)
+## 📸 Screenshots
 
-Los módulos clave que utiliza Xungungo son:
-
-- `streamlit` – interfaz web/desktop
-- `yfinance` – obtención de datos históricos y en tiempo real
-- `streamlit-lightweight-charts` – gráficas interactivas estilo TradingView
-- `pandas` & `numpy` – manipulación de datos
-
-Consulta [`requirements.txt`](./requirements.txt) para la lista completa.
+> _Coming soon — here we’ll drop images of the dashboard, plugins and charting UI so you can preview the look & feel._
 
 ---
 
-## 🙌 Contribuye
+## 🖥️ Core dependencies (manual mode)
 
-¿Te gustaría proponer un plugin, reportar un error o mejorar la documentación? ¡Eres bienvenido!
+* **streamlit** – UI layer
+* **yfinance** – historical & real‑time market data
+* **streamlit‑lightweight‑charts** – TradingView‑style interactive charts
+* **pandas** & **numpy** – data wrangling
 
-1. Abre un *Issue* con el detalle.
-2. Para código, crea un *fork*, haz tus cambios en una rama y envía un *Pull Request*.
+See [`requirements.txt`](./requirements.txt) for the full list.
 
 ---
 
-## 📄 Licencia
+## 🙌 Contributing
 
-Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Have an idea for a plugin, found a bug or want to improve the docs? **PRs are welcome!**
+
+1. Open an _Issue_ outlining your suggestion or bug.
+2. _Fork_ the repo, create a branch (`git checkout -b feature/my‑feature`), commit your changes and open a _Pull Request_.
+
+---
+
+## 📄 License
+
+Xungungo is distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
 
