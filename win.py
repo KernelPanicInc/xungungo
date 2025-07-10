@@ -12,6 +12,7 @@ stop_event = threading.Event()
 
 ctypes.windll.user32.SetProcessDpiAwarenessContext(-4)
 
+
 webview.settings['ALLOW_DOWNLOADS'] = True
 
 user_version = False
@@ -96,4 +97,5 @@ def on_webview_close():
 
 
 window.events.closed += on_webview_close
+
 webview.start(debug=False, icon="app/static/xungungo.png")
