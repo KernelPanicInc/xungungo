@@ -13,7 +13,7 @@ def render(ticker):
     from plugins.stocks.alwcharts.indicators.load_indicators import load_indicators
 
     theme = st_theme()
-    is_dark = theme.get("base") == "dark"
+    is_dark = (theme.get("base") == "dark") if theme is not None else True
 
     bg_color = "#1E1E1E" if is_dark else "#CCCCCC"
     text_color = "white" if is_dark else "black"
